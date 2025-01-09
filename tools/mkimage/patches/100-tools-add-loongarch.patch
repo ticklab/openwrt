@@ -1,0 +1,24 @@
+Index: u-boot-2024.07/boot/image.c
+===================================================================
+--- u-boot-2024.07.orig/boot/image.c
++++ u-boot-2024.07/boot/image.c
+@@ -96,6 +96,7 @@ static const table_entry_t uimage_arch[]
+ 	{	IH_ARCH_X86_64,		"x86_64",	"AMD x86_64",	},
+ 	{	IH_ARCH_XTENSA,		"xtensa",	"Xtensa",	},
+ 	{	IH_ARCH_RISCV,		"riscv",	"RISC-V",	},
++	{	IH_ARCH_LA,			"loongarch",	"LoongArch",	},
+ 	{	-1,			"",		"",		},
+ };
+ 
+Index: u-boot-2024.07/include/image.h
+===================================================================
+--- u-boot-2024.07.orig/include/image.h
++++ u-boot-2024.07/include/image.h
+@@ -141,6 +141,7 @@ enum {
+ 	IH_ARCH_X86_64,			/* AMD x86_64, Intel and Via */
+ 	IH_ARCH_XTENSA,			/* Xtensa	*/
+ 	IH_ARCH_RISCV,			/* RISC-V */
++	IH_ARCH_LA,				/* LoongArch */
+ 
+ 	IH_ARCH_COUNT,
+ };
