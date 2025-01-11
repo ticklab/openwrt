@@ -27,7 +27,8 @@ include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/cmake.mk
 
 CMAKE_OPTIONS += \
-	-DSOVERSION=$(PKG_ABI_VERSION)
+	-DSOVERSION=$(PKG_ABI_VERSION) \
+	-DCMAKE_CXX_FLAGS="-Wno-error=deprecated-declarations -Wno-deprecated-declarations "
 
 CMAKE_HOST_OPTIONS += \
 	-DCMAKE_SKIP_RPATH=FALSE \
