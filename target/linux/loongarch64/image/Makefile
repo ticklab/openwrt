@@ -30,7 +30,7 @@ define Build/boot-image
 		$@ \
 		$(CONFIG_TARGET_KERNEL_PARTSIZE) $@.boot \
 		$(CONFIG_TARGET_ROOTFS_PARTSIZE) $(IMAGE_ROOTFS) \
-		32768
+		256
 
 endef
 
