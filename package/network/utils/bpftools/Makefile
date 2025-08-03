@@ -81,8 +81,10 @@ endef
 
 # LTO not compatible with DSO using PIC
 ifneq ($(BUILD_VARIANT),lib)
-  TARGET_CFLAGS += -ffunction-sections -fdata-sections -flto
+  TARGET_CFLAGS += -ffunction-sections -fdata-sections -flto -DF_DUPFD_CLOEXEC=1030
   TARGET_LDFLAGS += -Wl,--gc-sections
+else
+  TARGET_CFLAGS += -DF_DUPFD_CLOEXEC=1030
 endif
 
 ifeq ($(BUILD_VARIANT),full)
