@@ -1,0 +1,58 @@
+--- a/src/thread/m68k/clone.s
++++ b/src/thread/m68k/clone.s
+@@ -3,7 +3,10 @@
+ .hidden __clone
+ .type   __clone,@function
+ __clone:
+-	movem.l %d2-%d5,-(%sp)
++	move.l %d5,-(%sp)
++	move.l %d4,-(%sp)
++	move.l %d3,-(%sp)
++	move.l %d2,-(%sp)
+ 	move.l #120,%d0
+ 	move.l 28(%sp),%d1
+ 	move.l 24(%sp),%d2
+@@ -16,7 +19,10 @@
+ 	trap #0
+ 	tst.l %d0
+ 	beq 1f
+-	movem.l (%sp)+,%d2-%d5
++	move.l (%sp)+,%d2
++	move.l (%sp)+,%d3
++	move.l (%sp)+,%d4
++	move.l (%sp)+,%d5
+ 	rts
+ 1:	move.l %a1,-(%sp)
+ 	jsr (%a0)
+--- a/src/thread/m68k/syscall_cp.s
++++ b/src/thread/m68k/syscall_cp.s
+@@ -10,7 +10,10 @@
+ .hidden __syscall_cp_asm
+ .type   __syscall_cp_asm,@function
+ __syscall_cp_asm:
+-	movem.l %d2-%d5,-(%sp)
++	move.l %d5,-(%sp)
++	move.l %d4,-(%sp)
++	move.l %d3,-(%sp)
++	move.l %d2,-(%sp)
+ 	movea.l 20(%sp),%a0
+ __cp_begin:
+ 	move.l (%a0),%d0
+@@ -18,9 +21,15 @@
+ 	movem.l 24(%sp),%d0-%d5/%a0
+ 	trap #0
+ __cp_end:
+-	movem.l (%sp)+,%d2-%d5
++	move.l (%sp)+,%d2
++	move.l (%sp)+,%d3
++	move.l (%sp)+,%d4
++	move.l (%sp)+,%d5
+ 	rts
+ __cp_cancel:
+-	movem.l (%sp)+,%d2-%d5
++	move.l (%sp)+,%d2
++	move.l (%sp)+,%d3
++	move.l (%sp)+,%d4
++	move.l (%sp)+,%d5
+ 	move.l __cancel-.-8,%a1
+ 	jmp (%pc,%a1)

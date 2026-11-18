@@ -1,0 +1,23 @@
+--- a/arch/m68k/atomic_arch.h
++++ b/arch/m68k/atomic_arch.h
+@@ -1,8 +1,20 @@
+ #define a_cas a_cas
+ static inline int a_cas(volatile int *p, int t, int s)
+ {
++#ifdef __mcoldfire__
++	__asm__ __volatile__ (
++		".short 0xf2c0"
++		: "+d"(t) : "a"(p), "d"(s) : "memory", "cc");
++#else
+ 	__asm__ __volatile__ (
+ 		"cas.l %0, %2, (%1)"
+ 		: "+d"(t) : "a"(p), "d"(s) : "memory", "cc");
++#endif
+ 	return t;
+ }
++
++#define a_cas_p a_cas_p
++static inline void *a_cas_p(volatile void *p, void *t, void *s)
++{
++	return (void *)a_cas(p, (int)t, (int)s);
++}

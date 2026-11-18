@@ -1,0 +1,22 @@
+--- a/src/setjmp/m68k/setjmp.s
++++ b/src/setjmp/m68k/setjmp.s
+@@ -13,6 +13,8 @@ ___setjmp:
+ 	movea.l 4(%sp),%a0
+ 	movem.l %d2-%d7/%a2-%a7,(%a0)
+ 	move.l (%sp),48(%a0)
++#ifndef __mcoldfire__
+ 	fmovem.x %fp2-%fp7,52(%a0)
++#endif
+ 	clr.l %d0
+ 	rts
+--- a/src/setjmp/m68k/longjmp.s
++++ b/src/setjmp/m68k/longjmp.s
+@@ -9,6 +9,8 @@ longjmp:
+ 	bne 1f
+ 	move.l #1,%d0
+ 1:	movem.l (%a0),%d2-%d7/%a2-%a7
++#ifndef __mcoldfire__
+ 	fmovem.x 52(%a0),%fp2-%fp7
++#endif
+ 	move.l 48(%a0),(%sp)
+ 	rts

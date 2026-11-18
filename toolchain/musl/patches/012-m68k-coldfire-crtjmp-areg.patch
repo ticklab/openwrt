@@ -1,0 +1,11 @@
+--- a/arch/m68k/reloc.h
++++ b/arch/m68k/reloc.h
+@@ -22,7 +22,7 @@
+ #define REL_TPOFF       R_68K_TLS_TPREL32
+ 
+ #define CRTJMP(pc,sp) __asm__ __volatile__( \
+-	"move.l %1,%%sp ; jmp (%0)" : : "r"(pc), "r"(sp) : "memory" )
++	"move.l %1,%%sp ; jmp (%0)" : : "a"(pc), "r"(sp) : "memory" )
+ 
+ #define GETFUNCSYM(fp, sym, got) __asm__ ( \
+ 	".hidden " #sym "\n" \

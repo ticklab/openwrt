@@ -1,0 +1,8 @@
+--- a/arch/m68k/bits/float.h
++++ b/arch/m68k/bits/float.h
+@@ -1,4 +1,4 @@
+-#if !__mcffpu__
++#if !__mcffpu__ && !__mcoldfire__
+ 
+ #define FLT_EVAL_METHOD 2
+ 
