@@ -1,0 +1,18 @@
+--- a/include/configs/M54418TWR.h
++++ b/include/configs/M54418TWR.h
+@@ -40,12 +40,14 @@
+  */
+ #ifdef CONFIG_CMD_NAND
+ #define CONFIG_JFFS2_NAND
+-#define CONFIG_NAND_FSL_NFC
+ #define CONFIG_SYS_NAND_BASE		0xFC0FC000
+ #define CONFIG_SYS_MAX_NAND_DEVICE	1
+ #define NAND_MAX_CHIPS			CONFIG_SYS_MAX_NAND_DEVICE
++#if !CONFIG_IS_ENABLED(NAND_VF610_NFC)
++#define CONFIG_NAND_FSL_NFC
+ #define CONFIG_SYS_NAND_SELECT_DEVICE
+ #endif
++#endif
+ 
+ /* Network configuration */
+ #ifdef CONFIG_MCFFEC

@@ -1,0 +1,35 @@
+--- a/configs/M54418TWR_nand_rmii_defconfig
++++ b/configs/M54418TWR_nand_rmii_defconfig
+@@ -5,7 +5,9 @@
+ CONFIG_TARGET_M54418TWR=y
+ CONFIG_SYS_EXTRA_OPTIONS="SYS_NAND_BOOT,SYS_INPUT_CLKSRC=50000000"
+ CONFIG_USE_BOOTARGS=y
+-CONFIG_BOOTARGS="root=/dev/mtdblock2 rw rootfstype=jffs2 mtdparts=NAND:1M(u-boot)ro,7M(kernel)ro,-(jffs2) console=ttyS0,115200"
++CONFIG_BOOTARGS="console=ttyS0,115200 mtdparts=NAND:1M(u-boot)ro,7M(kernel)ro,-(rootfs) ubi.mtd=2 root=ubi0:rootfs rootfstype=ubifs rw"
++CONFIG_USE_BOOTCOMMAND=y
++CONFIG_BOOTCOMMAND="mtd read nand0 0x40010000 0x100000 0x700000; bootm 0x40010000"
+ # CONFIG_DISPLAY_BOARDINFO is not set
+ CONFIG_HUSH_PARSER=y
+ # CONFIG_CMDLINE_EDITING is not set
+@@ -14,6 +16,7 @@
+ # CONFIG_CMD_FLASH is not set
+ # CONFIG_CMD_LOADB is not set
+ # CONFIG_CMD_LOADS is not set
++CONFIG_CMD_MTD=y
+ CONFIG_CMD_SF=y
+ CONFIG_CMD_SPI=y
+ # CONFIG_CMD_SETEXPR is not set
+@@ -21,8 +24,13 @@
+ CONFIG_CMD_MII=y
+ CONFIG_CMD_PING=y
+ CONFIG_CMD_CACHE=y
++CONFIG_CMD_FS_GENERIC=y
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_MTD=y
++CONFIG_DM_MTD=y
++CONFIG_MTD_RAW_NAND=y
++CONFIG_NAND_VF610_NFC=y
++CONFIG_NAND_VF610_NFC_DT=y
+ CONFIG_SPI_FLASH=y
+ CONFIG_SPI_FLASH_ATMEL=y
+ CONFIG_DM_ETH=y
