@@ -256,7 +256,11 @@ TARGET_LDFLAGS+= -fuse-ld=$(TARGET_LINKER)
 TARGET_PATH_PKG:=$(STAGING_DIR)/host/bin:$(STAGING_DIR_HOSTPKG)/bin:$(TARGET_PATH)
 
 ifeq ($(CONFIG_SOFT_FLOAT),y)
-  SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+  ifeq ($(CONFIG_m68k),y)
+    SOFT_FLOAT_CONFIG_OPTION:=
+  else
+    SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+  endif
   ifeq ($(CONFIG_arm),y)
     TARGET_CFLAGS+= -mfloat-abi=soft
   else

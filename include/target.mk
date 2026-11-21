@@ -282,6 +282,10 @@ ifeq ($(DUMP),1)
     CPU_CFLAGS := -O2 -pipe
     CPU_CFLAGS_generic:=-march=loongarch64
   endif
+  ifeq ($(ARCH),m68k)
+    CPU_TYPE ?= 54418
+    CPU_CFLAGS_54418 = -march=isac -mtune=cfv4 -msoft-float
+  endif
   ifneq ($(CPU_TYPE),)
     ifndef CPU_CFLAGS_$(CPU_TYPE)
       $(warning CPU_TYPE "$(CPU_TYPE)" doesn't correspond to a known type)
