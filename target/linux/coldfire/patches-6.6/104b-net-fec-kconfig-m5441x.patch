@@ -1,0 +1,20 @@
+--- a/drivers/net/ethernet/freescale/Kconfig
++++ b/drivers/net/ethernet/freescale/Kconfig
+@@ -8,7 +8,7 @@
+ 	default y
+ 	depends on FSL_SOC || QUICC_ENGINE || CPM1 || CPM2 || PPC_MPC512x || \
+ 		   M523x || M527x || M5272 || M528x || M520x || M532x || \
+-		   ARCH_MXC || ARCH_MXS || (PPC_MPC52xx && PPC_BESTCOMM) || \
++		   M5441x || ARCH_MXC || ARCH_MXS || (PPC_MPC52xx && PPC_BESTCOMM) || \
+ 		   ARCH_LAYERSCAPE || ARCH_S32 || COMPILE_TEST
+ 	help
+ 	  If you have a network (Ethernet) card belonging to this class, say Y.
+@@ -23,7 +23,7 @@
+ config FEC
+ 	tristate "FEC ethernet controller (of ColdFire and some i.MX CPUs)"
+ 	depends on (M523x || M527x || M5272 || M528x || M520x || M532x || \
+-		   ARCH_MXC || ARCH_S32 || SOC_IMX28 || COMPILE_TEST)
++		   M5441x || ARCH_MXC || ARCH_S32 || SOC_IMX28 || COMPILE_TEST)
+ 	default ARCH_MXC || SOC_IMX28 if ARM
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+ 	select CRC32

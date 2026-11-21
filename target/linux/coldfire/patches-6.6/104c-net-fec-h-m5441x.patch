@@ -1,0 +1,37 @@
+--- a/drivers/net/ethernet/freescale/fec.h
++++ b/drivers/net/ethernet/freescale/fec.h
+@@ -25,8 +25,8 @@
+ #include <net/xdp.h>
+ 
+ #if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
+-    defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_ARM) || \
+-    defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
++    defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_M5441x) || \
++    defined(CONFIG_ARM) || defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
+ /*
+  *	Just figures, Motorola would have to change the offsets for
+  *	registers in the same peripheral device on different models
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -2645,8 +2645,8 @@
+ 
+ /* List of registers that can be safety be read to dump them with ethtool */
+ #if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
+-	defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_ARM) || \
+-	defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
++	defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_M5441x) || \
++	defined(CONFIG_ARM) || defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
+ static __u32 fec_enet_register_version = 2;
+ static u32 fec_enet_register_offset[] = {
+ 	FEC_IEVENT, FEC_IMASK, FEC_R_DES_ACTIVE_0, FEC_X_DES_ACTIVE_0,
+@@ -2727,8 +2727,8 @@
+ 	u32 i, off;
+ 	int ret;
+ #if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
+-	defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_ARM) || \
+-	defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
++	defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_M5441x) || \
++	defined(CONFIG_ARM) || defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
+ 	u32 *reg_list;
+ 	u32 reg_cnt;
+ 

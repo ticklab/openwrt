@@ -1,0 +1,13 @@
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -187,6 +187,10 @@
+ 		.name = DRIVER_NAME,
+ 		.driver_data = 0,
+ 	}, {
++		/* ColdFire M5441x uses the enet-fec device name */
++		.name = "enet-fec",
++		.driver_data = 0,
++	}, {
+ 		.name = "imx25-fec",
+ 		.driver_data = (kernel_ulong_t)&fec_imx25_info,
+ 	}, {
