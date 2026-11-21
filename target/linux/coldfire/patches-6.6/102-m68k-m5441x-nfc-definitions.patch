@@ -1,0 +1,17 @@
+--- a/arch/m68k/include/asm/m5441xsim.h
++++ b/arch/m68k/include/asm/m5441xsim.h
+@@ -321,6 +321,14 @@
+ #define MCFSDHC_CLK		(MCFSDHC_BASE + 0x2c)
+ 
+ /*
++ * NAND flash controller (NFC) module
++ */
++#define MCF_NFC_BASE		0xfc0fc000
++#define MCF_NFC_SIZE		0x3f40
++#define MCFINT2_NFC		34
++#define MCF_IRQ_NFC		(MCFINT2_VECBASE + MCFINT2_NFC)
++
++/*
+  * Flexcan module
+  */
+ #define MCFFLEXCAN_BASE0	0xfc020000

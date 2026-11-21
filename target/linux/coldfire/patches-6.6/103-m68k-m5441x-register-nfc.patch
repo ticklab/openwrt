@@ -1,0 +1,53 @@
+--- a/arch/m68k/coldfire/device.c
++++ b/arch/m68k/coldfire/device.c
+@@ -581,6 +581,40 @@
+ };
+ #endif /* MCFSDHC_BASE */
+ 
++#ifdef MCF_NFC_BASE
++#include <linux/mtd/rawnand.h>
++
++struct vf610_nfc_platform_data {
++	u32 ecc_strength;
++	int cs;
++};
++
++static struct vf610_nfc_platform_data mcf_nfc_pdata = {
++	.ecc_strength = 24,
++	.cs = 0,
++};
++
++static struct resource mcf_nfc_resources[] = {
++	{
++		.start = MCF_NFC_BASE,
++		.end = MCF_NFC_BASE + MCF_NFC_SIZE - 1,
++		.flags = IORESOURCE_MEM,
++	}, {
++		.start = MCF_IRQ_NFC,
++		.end = MCF_IRQ_NFC,
++		.flags = IORESOURCE_IRQ,
++	},
++};
++
++static struct platform_device mcf_nfc = {
++	.name			= "mcf5441x-nfc",
++	.id			= -1,
++	.num_resources		= ARRAY_SIZE(mcf_nfc_resources),
++	.resource		= mcf_nfc_resources,
++	.dev.platform_data	= &mcf_nfc_pdata,
++};
++#endif /* MCF_NFC_BASE */
++
+ #ifdef MCFFLEXCAN_SIZE
+ 
+ #include <linux/can/platform/flexcan.h>
+@@ -660,6 +694,9 @@
+ #ifdef MCFFLEXCAN_SIZE
+ 	&mcf_flexcan0,
+ #endif
++#ifdef MCF_NFC_BASE
++	&mcf_nfc,
++#endif
+ };
+ 
+ /*

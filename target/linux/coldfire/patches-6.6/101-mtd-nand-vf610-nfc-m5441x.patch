@@ -1,0 +1,120 @@
+--- a/drivers/mtd/nand/raw/vf610_nfc.c
++++ b/drivers/mtd/nand/raw/vf610_nfc.c
+@@ -36,6 +36,11 @@
+ 
+ #define	DRV_NAME		"vf610_nfc"
+ 
++struct vf610_nfc_platform_data {
++	u32 ecc_strength;
++	int cs;
++};
++
+ /* Register Offsets */
+ #define NFC_FLASH_CMD1			0x3F00
+ #define NFC_FLASH_CMD2			0x3F04
+@@ -145,6 +150,7 @@
+ 
+ enum vf610_nfc_variant {
+ 	NFC_VFC610 = 1,
++	NFC_M54418,
+ };
+ 
+ struct vf610_nfc {
+@@ -705,6 +711,12 @@
+ };
+ MODULE_DEVICE_TABLE(of, vf610_nfc_dt_ids);
+ 
++static const struct platform_device_id vf610_nfc_id_table[] = {
++	{ .name = "mcf5441x-nfc" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(platform, vf610_nfc_id_table);
++
+ static void vf610_nfc_preinit_controller(struct vf610_nfc *nfc)
+ {
+ 	vf610_nfc_clear(nfc, NFC_FLASH_CONFIG, CONFIG_16BIT);
+@@ -836,33 +848,56 @@
+ 
+ 	nfc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(nfc->clk)) {
+-		dev_err(nfc->dev, "Unable to get and enable clock!\n");
+-		return PTR_ERR(nfc->clk);
++		err = PTR_ERR(nfc->clk);
++		if (err == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		if (err == -ENODEV)
++			nfc->clk = NULL;
++		else {
++			dev_err(nfc->dev, "Unable to get and enable clock!\n");
++			return err;
++		}
+ 	}
+ 
+-	of_id = of_match_device(vf610_nfc_dt_ids, &pdev->dev);
+-	if (!of_id)
+-		return -ENODEV;
+-
+-	nfc->variant = (uintptr_t)of_id->data;
++	if (nfc->dev->of_node) {
++		of_id = of_match_device(vf610_nfc_dt_ids, &pdev->dev);
++		if (!of_id)
++			return -ENODEV;
++
++		nfc->variant = (uintptr_t)of_id->data;
++
++		for_each_available_child_of_node(nfc->dev->of_node, child) {
++			if (of_device_is_compatible(child, "fsl,vf610-nfc-nandcs")) {
++
++				if (nand_get_flash_node(chip)) {
++					dev_err(nfc->dev,
++						"Only one NAND chip supported!\n");
++					of_node_put(child);
++					return -EINVAL;
++				}
+ 
+-	for_each_available_child_of_node(nfc->dev->of_node, child) {
+-		if (of_device_is_compatible(child, "fsl,vf610-nfc-nandcs")) {
+-
+-			if (nand_get_flash_node(chip)) {
+-				dev_err(nfc->dev,
+-					"Only one NAND chip supported!\n");
+-				of_node_put(child);
+-				return -EINVAL;
++				nand_set_flash_node(chip, child);
+ 			}
++		}
+ 
+-			nand_set_flash_node(chip, child);
++		if (!nand_get_flash_node(chip)) {
++			dev_err(nfc->dev, "NAND chip sub-node missing!\n");
++			return -ENODEV;
++		}
++	} else {
++		struct vf610_nfc_platform_data *pdata = dev_get_platdata(&pdev->dev);
++
++		nfc->variant = NFC_M54418;
++		if (!pdata || !pdata->ecc_strength) {
++			dev_err(nfc->dev, "Missing platform data\n");
++			return -ENODEV;
+ 		}
+-	}
+ 
+-	if (!nand_get_flash_node(chip)) {
+-		dev_err(nfc->dev, "NAND chip sub-node missing!\n");
+-		return -ENODEV;
++		chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
++		chip->ecc.strength = pdata->ecc_strength;
++		chip->ecc.size = PAGE_2K;
++		chip->ecc.algo = NAND_ECC_ALGO_BCH;
++		chip->options |= NAND_NO_SUBPAGE_WRITE;
+ 	}
+ 
+ 	chip->options |= NAND_NO_SUBPAGE_WRITE;
+@@ -944,6 +979,7 @@
+ 	},
+ 	.probe		= vf610_nfc_probe,
+ 	.remove_new	= vf610_nfc_remove,
++	.id_table	= vf610_nfc_id_table,
+ };
+ 
+ module_platform_driver(vf610_nfc_driver);
