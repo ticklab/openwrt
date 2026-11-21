@@ -1,0 +1,11 @@
+--- a/libgcc/config/m68k/linux-atomic.c
++++ b/libgcc/config/m68k/linux-atomic.c
+@@ -56,7 +56,7 @@
+   return d0;
+ }
+ 
+-#define HIDDEN __attribute__ ((visibility ("hidden")))
++#define HIDDEN __attribute__ ((visibility ("default")))
+ 
+ /* Big endian masks  */
+ #define INVERT_MASK_1 24

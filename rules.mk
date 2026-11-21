@@ -253,6 +253,12 @@ endif
 TARGET_LINKER?=bfd
 TARGET_LDFLAGS+= -fuse-ld=$(TARGET_LINKER)
 
+ifeq ($(CONFIG_m68k),y)
+  # m68k libgcc_s.so.1 does not export the __sync_*_4 atomic helpers
+  # (only present in static libgcc.a), so link the static libgcc.
+  TARGET_LDFLAGS+= -static-libgcc
+endif
+
 TARGET_PATH_PKG:=$(STAGING_DIR)/host/bin:$(STAGING_DIR_HOSTPKG)/bin:$(TARGET_PATH)
 
 ifeq ($(CONFIG_SOFT_FLOAT),y)
