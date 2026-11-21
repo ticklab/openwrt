@@ -1,0 +1,25 @@
+--- a/drivers/mtd/parsers/cmdlinepart.c
++++ b/drivers/mtd/parsers/cmdlinepart.c
+@@ -324,6 +324,7 @@
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_OF)
+ static int search_fixed_partition(struct mtd_info *master,
+ 				  struct mtd_partition *target_part,
+ 				  struct mtd_partition *fixed_part)
+@@ -385,6 +386,14 @@
+ 
+ 	return -EINVAL;
+ }
++#else
++static int search_fixed_partition(struct mtd_info *master,
++				  struct mtd_partition *target_part,
++				  struct mtd_partition *fixed_part)
++{
++	return -EINVAL;
++}
++#endif
+ 
+ /*
+  * Main function to be called from the MTD mapping driver/device to
