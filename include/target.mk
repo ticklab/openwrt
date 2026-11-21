@@ -284,7 +284,7 @@ ifeq ($(DUMP),1)
   endif
   ifeq ($(ARCH),m68k)
     CPU_TYPE ?= 54418
-    CPU_CFLAGS_54418 = -march=isac -mtune=cfv4 -msoft-float
+    CPU_CFLAGS_54418 = -march=isac -mtune=cfv4 -msoft-float -fno-jump-tables
   endif
   ifneq ($(CPU_TYPE),)
     ifndef CPU_CFLAGS_$(CPU_TYPE)
